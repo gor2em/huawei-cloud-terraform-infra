@@ -77,3 +77,9 @@ output "cce_cluster_name" {
   description = "CCE cluster name"
   value       = huaweicloud_cce_cluster.this.name
 }
+
+// --- CCE Node Pools ---
+output "nodepool_ids" {
+  description = "CCE Node Pool IDs"
+  value       = { for k, np in huaweicloud_cce_node_pool.this : k => np.id }
+}

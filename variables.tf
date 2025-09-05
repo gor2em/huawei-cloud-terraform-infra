@@ -130,3 +130,16 @@ variable "cce_network_type" {
 }
 ############################################################################ CCE K8s End
 
+# CCE Nodepool Start
+variable "nodepools" {
+  description = "CCE node pools config"
+  type = map(object({
+    az       = string
+    subnet   = string
+    os       = string
+    flavor   = string
+    count    = number
+    password = string 
+  }))
+}
+########################################################################### Nodepool End

@@ -10,7 +10,7 @@ resource "huaweicloud_cce_cluster" "this" {
     huaweicloud_vpc_subnet.this["pod-a"].ipv4_subnet_id,
     huaweicloud_vpc_subnet.this["pod-b"].ipv4_subnet_id,
   ])
-  eip = huaweicloud_vpc_eip.this["cce"].id
+  eip = huaweicloud_vpc_eip.this["cce"].address
 
   depends_on = [
     huaweicloud_vpc_subnet.this["pod-a"],
@@ -20,3 +20,34 @@ resource "huaweicloud_cce_cluster" "this" {
   tags = var.default_tags
 }
 ############################################################################## CCE End
+
+
+# Nodepool Start
+resource "huaweicloud_cce_node_pool" "this" {
+  for_each = var.nodepools
+
+  cluster_id         = huaweicloud_cce_cluster.this.id
+  name               = "${var.env}-${var.app_name}-${each.key}"
+  os                 = each.value.os
+  initial_node_count = each.value.count
+  flavor_id          = each.value.flavor
+  type               = "vm"
+  availability_zone  = each.value.az
+  password           = each.value.password
+  charging_mode      = var.charge_mode
+
+  root_volume {
+    size       = 40
+    volumetype = "SAS"
+  }
+
+  data_volumes {
+    size       = 100
+    volumetype = "GPSSD"
+  }
+
+  subnet_id = huaweicloud_vpc_subnet.this[each.value.subnet].id
+
+  tags = var.default_tags
+}
+########################################################################### Nodepool End

@@ -72,5 +72,27 @@ nat_spec = 1 # 1=small, 2=medium, 3=large, 4=xl
 # CCE K8s Start
 cce_version      = "v1.31"
 cce_flavor_id    = "cce.s1.small"
-cce_network_type = "overlay_l2" # eni for turbo, overlay_l2 for normal
+cce_network_type = "eni" # eni for turbo, overlay_l2 for standard
 ############################################################################# CCE K8s End
+
+# CCE Nodepool Start
+nodepools = {
+  worker-a = {
+    az     = "tr-west-1a"
+    subnet = "node-a"
+    # os       = "Ubuntu 24.04"
+    os       = "EulerOS 2.9"
+    flavor   = "x1.2u.4g"
+    count    = 1
+    password = "StrongPass!123"
+  }
+  worker-b = {
+    az       = "tr-west-1b"
+    subnet   = "node-b"
+    os       = "EulerOS 2.9"
+    flavor   = "x1.2u.4g"
+    count    = 1
+    password = "StrongPass!123"
+  }
+}
+########################################################################## CCE Nodepool End
