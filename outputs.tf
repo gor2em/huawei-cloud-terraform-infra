@@ -1,31 +1,79 @@
-// --- Network outputs ---
+// --- VPC & Subnets ---
 output "vpc_id" {
+  description = "VPC ID"
   value       = huaweicloud_vpc.this.id
-  description = "ID of the created VPC"
 }
 
 output "subnet_ids" {
+  description = "Subnet IDs by key (default, node-a, ...)"
   value       = { for k, s in huaweicloud_vpc_subnet.this : k => s.id }
-  description = "Map of subnet IDs keyed by subnet name"
 }
 
-output "nat_id" {
-  value       = huaweicloud_nat_gateway.this.id
-  description = "ID of the NAT Gateway"
+output "subnet_ipv4_ids" {
+  description = "IPv4 subnet IDs by key (used by ELB/CCE)"
+  value       = { for k, s in huaweicloud_vpc_subnet.this : k => s.ipv4_subnet_id }
 }
 
-output "snat_rule_ids" {
-  value       = { for k, r in huaweicloud_nat_snat_rule.pods : k => r.id }
-  description = "SNAT Rule IDs for pod subnets"
-}
-
-
-// --- ELB outputs ---
-output "elb_id" {
-  description = "The ID of the ELB"
-  value       = huaweicloud_lb_loadbalancer.ingress_elb.id
+// --- Elastic IPs ---
+output "eip_ids" {
+  description = "EIP resource IDs by purpose"
+  value       = { for k, e in huaweicloud_vpc_eip.this : k => e.id }
 }
 
 output "eip_addresses" {
-  value = { for k, e in huaweicloud_vpc_eip.this : k => e.address }
+  description = "EIP addresses by purpose"
+  value       = { for k, e in huaweicloud_vpc_eip.this : k => e.address }
+}
+
+output "eip_nat_address" {
+  description = "Public IP used by NAT Gateway SNAT"
+  value       = try(huaweicloud_vpc_eip.this["nat"].address, null)
+}
+
+output "eip_elb_address" {
+  description = "Public IP associated to the Ingress ELB"
+  value       = try(huaweicloud_vpc_eip.this["elb"].address, null)
+}
+
+output "eip_cce_address" {
+  description = "Public IP attached to the CCE API endpoint"
+  value       = try(huaweicloud_vpc_eip.this["cce"].address, null)
+}
+
+// --- NAT Gateway ---
+output "nat_gateway_id" {
+  description = "NAT Gateway ID"
+  value       = huaweicloud_nat_gateway.this.id
+}
+
+output "nat_snat_rule_ids" {
+  description = "SNAT Rule IDs for pod subnets"
+  value       = { for k, r in huaweicloud_nat_snat_rule.pods : k => r.id }
+}
+
+// --- ELB ---
+output "elb_id" {
+  description = "Ingress ELB ID"
+  value       = huaweicloud_lb_loadbalancer.ingress_elb.id
+}
+
+output "elb_vip_address" {
+  description = "Ingress ELB VIP address (private)"
+  value       = huaweicloud_lb_loadbalancer.ingress_elb.vip_address
+}
+
+output "elb_vip_port_id" {
+  description = "Ingress ELB VIP port ID"
+  value       = huaweicloud_lb_loadbalancer.ingress_elb.vip_port_id
+}
+
+// --- CCE Cluster ---
+output "cce_cluster_id" {
+  description = "CCE cluster ID"
+  value       = huaweicloud_cce_cluster.this.id
+}
+
+output "cce_cluster_name" {
+  description = "CCE cluster name"
+  value       = huaweicloud_cce_cluster.this.name
 }
