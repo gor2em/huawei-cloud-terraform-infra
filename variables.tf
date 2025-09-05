@@ -83,11 +83,6 @@ variable "eip_bandwidth_size" {
 variable "eips" {
   description = "EIP resources to create"
   type        = map(string)
-  default = {
-    nat = "nat"
-    elb = "ingress"
-    cce = "cce"
-  }
 }
 ############################################################################ EIP End
 
