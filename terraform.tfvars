@@ -3,8 +3,8 @@ env      = "dev"
 app_name = "myapp"
 region   = "tr-west-1"
 
-access_key = ""
-secret_key = ""
+access_key = "NEDLXVY1JVZ5YORRS0GO"
+secret_key = "5agQcJtMJFMyJVjMEkZZ0hzth0L9ydfqrdnS3Eam"
 
 default_tags = {
   Environment = "dev"

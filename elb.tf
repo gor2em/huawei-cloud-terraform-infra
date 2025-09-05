@@ -13,6 +13,6 @@ resource "huaweicloud_lb_loadbalancer" "ingress_elb" {
 }
 
 resource "huaweicloud_vpc_eip_associate" "ingress_elb_assoc" {
-  public_ip = huaweicloud_vpc_eip.ingress_elb.address
+  public_ip = huaweicloud_vpc_eip.this["elb"].address
   port_id   = huaweicloud_lb_loadbalancer.ingress_elb.vip_port_id
 }

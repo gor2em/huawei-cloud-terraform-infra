@@ -14,11 +14,6 @@ output "nat_id" {
   description = "ID of the NAT Gateway"
 }
 
-output "nat_eip_address" {
-  value       = huaweicloud_vpc_eip.nat.address
-  description = "EIP attached to NAT Gateway"
-}
-
 output "snat_rule_ids" {
   value       = { for k, r in huaweicloud_nat_snat_rule.pods : k => r.id }
   description = "SNAT Rule IDs for pod subnets"
@@ -31,8 +26,6 @@ output "elb_id" {
   value       = huaweicloud_lb_loadbalancer.ingress_elb.id
 }
 
-output "elb_eip_address" {
-  description = "The public IP address attached to ELB"
-  value       = huaweicloud_vpc_eip.ingress_elb.address
+output "eip_addresses" {
+  value = { for k, e in huaweicloud_vpc_eip.this : k => e.address }
 }
-

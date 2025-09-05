@@ -14,5 +14,5 @@ resource "huaweicloud_nat_snat_rule" "pods" {
 
   nat_gateway_id = huaweicloud_nat_gateway.this.id
   subnet_id      = huaweicloud_vpc_subnet.this[each.key].id
-  floating_ip_id = huaweicloud_vpc_eip.nat.id
+  floating_ip_id = huaweicloud_vpc_eip.this["nat"].id
 }

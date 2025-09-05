@@ -11,7 +11,7 @@ resource "huaweicloud_cce_cluster" "this" {
     huaweicloud_vpc_subnet.this["pod-a"].ipv4_subnet_id,
     huaweicloud_vpc_subnet.this["pod-b"].ipv4_subnet_id,
   ])
-  eip = huaweicloud_vpc_eip.cce_eip.address
+  eip = huaweicloud_vpc_eip.this["cce"].id
 
   depends_on = [
     huaweicloud_vpc_subnet.this["pod-a"],
