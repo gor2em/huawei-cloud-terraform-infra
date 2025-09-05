@@ -3,8 +3,8 @@ env      = "dev"
 app_name = "myapp"
 region   = "tr-west-1"
 
-access_key = "NEDLXVY1JVZ5YORRS0GO"
-secret_key = "5agQcJtMJFMyJVjMEkZZ0hzth0L9ydfqrdnS3Eam"
+access_key = "--YOURAK--"
+secret_key = "--YOURSK--"
 
 default_tags = {
   Environment = "dev"
@@ -96,3 +96,12 @@ nodepools = {
   }
 }
 ########################################################################## CCE Nodepool End
+
+# CCE Addons Start
+cce_addons = [
+  {
+    name    = "nginx-ingress"
+    version = "3.0.34"
+  }
+]
+########################################################################### CCE Addons End

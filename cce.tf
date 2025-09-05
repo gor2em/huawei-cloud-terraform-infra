@@ -48,6 +48,40 @@ resource "huaweicloud_cce_node_pool" "this" {
 
   subnet_id = huaweicloud_vpc_subnet.this[each.value.subnet].id
 
+  depends_on = [
+    huaweicloud_cce_cluster.this
+  ]
+
   tags = var.default_tags
 }
 ########################################################################### Nodepool End
+
+# Addons Start
+resource "huaweicloud_cce_addon" "nginx_ingress" {
+
+  for_each      = { for addon in var.cce_addons : addon.name => addon }
+  cluster_id    = huaweicloud_cce_cluster.this.id
+  template_name = each.value.name
+  version       = each.value.version
+
+
+  values {
+    basic_json = "{}"
+
+    # Special case: nginx-ingress needs ELB annotation
+    custom_json = each.value.name == "nginx-ingress" ? jsonencode({
+      "service" = {
+        "annotations" = {
+          "kubernetes.io/elb.id" = huaweicloud_lb_loadbalancer.ingress_elb.id
+        }
+      }
+    }) : "{}"
+  }
+
+
+  depends_on = [
+    huaweicloud_cce_cluster.this
+  ]
+
+}
+########################################################################### Addons End

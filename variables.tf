@@ -139,7 +139,17 @@ variable "nodepools" {
     os       = string
     flavor   = string
     count    = number
-    password = string 
+    password = string
   }))
 }
 ########################################################################### Nodepool End
+
+# CCE Addons Start
+variable "cce_addons" {
+  description = "CCE addons to install (name and version)" # 3.0.34 for v1.31
+  type = list(object({
+    name    = string
+    version = string
+  }))
+}
+########################################################################### CCE Addons End
