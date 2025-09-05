@@ -39,10 +39,3 @@ subnets = {
   "data-a"  = { cidr = "10.0.6.0/24", az = "tr-west-1a" }
   "data-b"  = { cidr = "10.0.7.0/24", az = "tr-west-1b" }
 }
-
-// --- EIP ---
-# eip_bandwidth_size = 300
-# eip_charge_mode    = "traffic"
-
-# NAT Gateway
-# nat_spec = 1 # small package
