@@ -1,15 +1,4 @@
-variable "eips" {
-  description = "EIP resources to create"
-  type        = map(string)
-  default = {
-    nat       = "nat"
-    elb       = "ingress"
-    cce       = "cce"
-    rds_psql  = "rds-psql"
-    rds_mysql = "rds-mysql"
-  }
-}
-
+# EIP Start (eips from variable map)
 resource "huaweicloud_vpc_eip" "this" {
   for_each = var.eips
 
@@ -26,3 +15,4 @@ resource "huaweicloud_vpc_eip" "this" {
 
   tags = var.default_tags
 }
+############################################################################### EIP End

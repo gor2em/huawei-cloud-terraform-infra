@@ -1,4 +1,4 @@
-// --- Credentials ---
+# AK/SK for Huawei Cloud Start
 variable "access_key" {
   description = "Huawei Cloud access key"
   type        = string
@@ -12,8 +12,9 @@ variable "secret_key" {
   sensitive   = true
   default     = ""
 }
+############################################################################# AK/SK for Huawei Cloud End
 
-// --- Environment & naming ---
+# Environment & General Settings Start
 variable "env" {
   description = "Deployment environment (e.g., dev, prod)"
   type        = string
@@ -29,6 +30,19 @@ variable "region" {
   type        = string
 }
 
+variable "default_tags" {
+  description = "Default tags for all resources"
+  type        = map(string)
+}
+
+variable "svc" {
+  description = "Service abbreviations for naming"
+  type        = map(string)
+}
+############################################################################ Environment & General Settings End
+
+
+# Billing Mode Start (charge_mode = Billing mode, eip_charge_mode = EIP Billing mode)
 variable "charge_mode" {
   description = <<EOT
 Global charge mode applied to all services that support billing options.
@@ -39,32 +53,14 @@ EOT
   default     = "postPaid"
 }
 
-// --- Tags ---
-variable "default_tags" {
-  description = "Default tags for all resources"
-  type        = map(string)
-}
-
-// --- Service abbreviations (naming) ---
-variable "svc" {
-  description = "Service abbreviations for naming"
-  type        = map(string)
-}
-
-// --- VPC & Subnets ---
-variable "vpc_cidr" {
-  description = "CIDR block for the VPC"
+variable "eip_charge_mode" {
+  description = "Default bandwidth charge mode"
   type        = string
+  default     = "traffic"
 }
+############################################################################# Billing Mode End
 
-variable "subnets" {
-  description = "Map of subnets keyed by name; each { cidr, az }"
-  type = map(object({
-    cidr = string
-    az   = string
-  }))
-}
-
+# EIP Start (EIP related variables)
 variable "eip_type" {
   description = "EIP line type (e.g., 5_bgp, 5_union, 5_telcom, 5_mobile)"
   type        = string
@@ -83,20 +79,42 @@ variable "eip_bandwidth_size" {
   default     = 300
 }
 
-variable "eip_charge_mode" {
-  description = "Default bandwidth charge mode"
-  type        = string
-  default     = "traffic"
+// Creating by default 3 EIPs: nat, elb (ingress), cce
+variable "eips" {
+  description = "EIP resources to create"
+  type        = map(string)
+  default = {
+    nat = "nat"
+    elb = "ingress"
+    cce = "cce"
+  }
 }
-// --- NAT Gateway ---
+############################################################################ EIP End
+
+# VPC and Subnets Start
+variable "vpc_cidr" {
+  description = "CIDR block for the VPC"
+  type        = string
+}
+
+variable "subnets" {
+  description = "Map of subnets keyed by name; each { cidr, az }"
+  type = map(object({
+    cidr = string
+    az   = string
+  }))
+}
+############################################################################# VPC and Subnets End
+
+# Nat Gateway Start
 variable "nat_spec" {
   description = "NAT Gateway spec (1=small, 2=medium, 3=large, 4=xl)"
   type        = number
   default     = 1
 }
+############################################################################# Nat Gateway End
 
-
-// --- CCE Cluster ---
+# CCE K8s Start
 variable "cce_version" {
   description = "CCE cluster version (e.g., v1.30)"
   type        = string
@@ -107,18 +125,7 @@ variable "cce_flavor_id" {
   description = "CCE cluster flavor ID (e.g., cce.s1.small, cce.s1.medium, cce.s1.large)"
   type        = string
   default     = "cce.s1.small"
-
-  /*
-  https://registry.terraform.io/providers/huaweicloud/hcso/latest/docs/resources/cce_cluster
-  Flavor ID options:
-  cce.s1.small: small-scale single cluster (up to 50 nodes).
-  cce.s1.medium: medium-scale single cluster (up to 200 nodes).
-  cce.s2.small: small-scale HA cluster (up to 50 nodes).
-  cce.s2.medium: medium-scale HA cluster (up to 200 nodes).
-  cce.s2.large: large-scale HA cluster (up to 1000 nodes).
-  cce.s2.xlarge: large-scale HA cluster (up to 2000 nodes).
-  */
-
+  // Flavor ID options:  https://registry.terraform.io/providers/huaweicloud/hcso/latest/docs/resources/cce_cluster
 }
 
 variable "cce_network_type" {
@@ -126,3 +133,5 @@ variable "cce_network_type" {
   type        = string
   default     = "eni" // VPC-CNI mode
 }
+############################################################################ CCE K8s End
+

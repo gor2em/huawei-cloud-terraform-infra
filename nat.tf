@@ -1,14 +1,15 @@
-// --- NAT Gateway (Pay-per-use, small spec) ---
+# NAT Gateway Start
 resource "huaweicloud_nat_gateway" "this" {
   name          = "${var.env}-${var.app_name}-${var.svc["nat"]}"
-  spec          = var.nat_spec //  1 = small
+  spec          = var.nat_spec
   vpc_id        = huaweicloud_vpc.this.id
-  subnet_id     = huaweicloud_vpc_subnet.this["default"].id // default subnet
+  subnet_id     = huaweicloud_vpc_subnet.this["default"].id
   charging_mode = var.charge_mode
   tags          = var.default_tags
 }
+############################################################################# NAT Gateway End
 
-// --- SNAT Rule for pod-a & pod-b subnets ---
+# NAT SNAT Rule Start
 resource "huaweicloud_nat_snat_rule" "pods" {
   for_each = { for k, s in var.subnets : k => s if contains(["pod-a", "pod-b"], k) } // only for pod-a and pod-b subnets
 
@@ -16,3 +17,4 @@ resource "huaweicloud_nat_snat_rule" "pods" {
   subnet_id      = huaweicloud_vpc_subnet.this[each.key].id
   floating_ip_id = huaweicloud_vpc_eip.this["nat"].id
 }
+############################################################################# NAT SNAT Rule End

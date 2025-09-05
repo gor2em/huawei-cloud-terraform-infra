@@ -1,4 +1,4 @@
-# --- Env & naming ---
+# Global variables Start
 env      = "dev"
 app_name = "myapp"
 region   = "tr-west-1"
@@ -10,8 +10,9 @@ default_tags = {
   Environment = "dev"
   ManagedBy   = "Terraform"
 }
+############################################################################# Global variables End
 
-# --- Service abbreviations ---
+# Service name abbreviations Start
 svc = {
   vpc    = "vpc"
   subnet = "subnet"
@@ -26,8 +27,9 @@ svc = {
   cce    = "cce"
   nat    = "natgw"
 }
+############################################################################# Service name abbreviations End
 
-# --- Network ---
+# VPC and Subnets Start
 vpc_cidr = "10.0.0.0/16"
 
 subnets = {
@@ -39,3 +41,4 @@ subnets = {
   "data-a"  = { cidr = "10.0.6.0/24", az = "tr-west-1a" }
   "data-b"  = { cidr = "10.0.7.0/24", az = "tr-west-1b" }
 }
+############################################################################# VPC and Subnets End
